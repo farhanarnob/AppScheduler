@@ -17,7 +17,7 @@ import com.hellodoc24.hellodoc24patientapp.data.source.database.dao.*
     autoMigrations = []
 )
 abstract class AppDatabase : RoomDatabase() {
-    abstract fun userDao(): UserDao
+    abstract fun scheduleDao(): ScheduleDao
 
     companion object {
         // Singleton prevents multiple instances of database opening at the

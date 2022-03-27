@@ -64,11 +64,13 @@ object UIUtility {
     }
 
     fun showFullScreen(activity: Activity) {
-        (activity as MainActivity).binding.toolbar.visibility = View.GONE
+        (activity as MainActivity).binding
+            .waitingPageLayout.waitingPageMother.visibility = View.VISIBLE
     }
 
     fun exitFullScreen(activity: Activity) {
-        (activity as MainActivity).binding.toolbar.visibility = View.VISIBLE
+        (activity as MainActivity).binding
+            .waitingPageLayout.waitingPageMother.visibility = View.GONE
     }
 
 

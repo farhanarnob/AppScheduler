@@ -8,7 +8,27 @@
         android:layout_height="match_parent"
         android:background="@color/white"
         android:keepScreenOn="false"
-        tools:context=".ui.home.HomeFragment">
+        tools:context=".ui.home.CreateOrUpdateScheduleFragment">
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_holder"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            android:paddingBottom="56dp"
+            android:clipToPadding="false"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0"/>
+
+        <include
+            android:id="@+id/empty_parent_layout"
+            layout="@layout/empty_list"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
