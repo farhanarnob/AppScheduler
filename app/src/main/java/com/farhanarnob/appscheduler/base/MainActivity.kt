@@ -1,20 +1,24 @@
-package com.farhanarnob.appscheduler
+package com.farhanarnob.appscheduler.base
 
+import android.content.Intent
+import android.content.pm.ResolveInfo
 import android.os.Bundle
-import com.google.android.material.snackbar.Snackbar
+import android.view.Menu
+import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
-import android.view.Menu
-import android.view.MenuItem
+import com.farhanarnob.appscheduler.R
 import com.farhanarnob.appscheduler.databinding.ActivityMainBinding
+import com.google.android.material.snackbar.Snackbar
 
-class MainActivity : AppCompatActivity() {
+
+class MainActivity : AppCompatActivity(), ActivityCallback {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
-    private lateinit var binding: ActivityMainBinding
+    lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,7 +49,20 @@ class MainActivity : AppCompatActivity() {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         return when (item.itemId) {
-            R.id.action_settings -> true
+            R.id.clear_all_schedule -> {
+                val mainIntent = Intent(Intent.ACTION_MAIN, null)
+                mainIntent.addCategory(Intent.CATEGORY_LAUNCHER)
+                val pkgAppsList: List<ResolveInfo> =
+                    this.packageManager.queryIntentActivities(mainIntent, 0)
+                android.app.AlertDialog
+                    .Builder(this)
+                    .setMessage(pkgAppsList.toString())
+                    .setCancelable(false)
+                    .setPositiveButton("Yes") { _, _ -> }
+                    .setNegativeButton("No") { _, _ -> }
+                    .create().show()
+                true
+            }
             else -> super.onOptionsItemSelected(item)
         }
     }
@@ -54,5 +71,16 @@ class MainActivity : AppCompatActivity() {
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         return navController.navigateUp(appBarConfiguration)
                 || super.onSupportNavigateUp()
+    }
+
+    override fun setupToolbar(title: Int, func: () -> Unit) {
+        binding.toolbar.title = getString(title)
+        binding.toolbar.setNavigationOnClickListener {
+            func()
+        }
+    }
+
+    override fun toolbarIconVisibility(visibility: Boolean) {
+        binding.toolbar.navigationIcon?.setVisible(visibility,false)
     }
 }

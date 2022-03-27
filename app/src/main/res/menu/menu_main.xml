@@ -1,10 +1,10 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.farhanarnob.appscheduler.MainActivity">
+    tools:context="com.farhanarnob.appscheduler.base.MainActivity">
     <item
-        android:id="@+id/action_settings"
+        android:id="@+id/clear_all_schedule"
         android:orderInCategory="100"
-        android:title="@string/action_settings"
+        android:title="@string/clear_all_schedule"
         app:showAsAction="never" />
 </menu>
