@@ -7,6 +7,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
@@ -18,6 +19,7 @@ import com.google.android.material.snackbar.Snackbar
 
 class MainActivity : AppCompatActivity(), ActivityCallback {
 
+    private var navigatetoFragment: ((id: Int) -> Unit)? = null
     private lateinit var appBarConfiguration: AppBarConfiguration
     lateinit var binding: ActivityMainBinding
 
@@ -34,8 +36,10 @@ class MainActivity : AppCompatActivity(), ActivityCallback {
         setupActionBarWithNavController(navController, appBarConfiguration)
 
         binding.fabAdd.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
+            navigatetoFragment?.let {
+                binding.fabAdd.visibility = View.GONE
+                it(R.id.CreateOrUpdateScheduleFragment)
+            }
         }
     }
 
@@ -44,6 +48,13 @@ class MainActivity : AppCompatActivity(), ActivityCallback {
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         return navController.navigateUp(appBarConfiguration)
                 || super.onSupportNavigateUp()
+    }
+
+    override fun navigateTo(func: (id: Int) -> Unit) {
+        lifecycleScope.launchWhenResumed {
+            binding.fabAdd.visibility = View.VISIBLE
+            navigatetoFragment = func
+        }
     }
 
     override fun setupToolbar(title: Int, func: () -> Unit) {

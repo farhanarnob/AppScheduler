@@ -10,6 +10,7 @@ import android.widget.AdapterView
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.farhanarnob.appscheduler.R
 import com.farhanarnob.appscheduler.adapter.AppInfoArrayAdapter
@@ -44,16 +45,15 @@ class CreateOrUpdateScheduleFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         lifecycleScope.launchWhenResumed {
             viewModelSetup()
-            toolbarSetup(this@CreateOrUpdateScheduleFragment::onBackPressed,R.string.schedule_list)
-            hideToolbarBackIcon()
-            UIUtility.showFullScreen(requireActivity())
+            toolbarSetup(this@CreateOrUpdateScheduleFragment::onBackPressed,R.string.add_a_schedule)
+            showToolbarBackIcon()
             observe()
             viewModel.loadInstalledAppList(requireContext())
         }
     }
 
     private fun onBackPressed() {
-
+        findNavController().navigateUp()
     }
     private fun appSpinner(list: List<ResolveInfo>) {
         val adapter = AppInfoArrayAdapter(

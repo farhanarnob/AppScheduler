@@ -59,6 +59,9 @@ open class BaseFragment:Fragment(){
     internal fun hideToolbarBackIcon(){
         activityCallback?.toolbarIconVisibility(visibility = false)
     }
+    internal fun showToolbarBackIcon(){
+        activityCallback?.toolbarIconVisibility(visibility = true)
+    }
 
     internal fun toolbarSetup(func :() -> Unit, title:Int) {
         _func = func
@@ -66,9 +69,14 @@ open class BaseFragment:Fragment(){
         activityCallback?.setupToolbar(title,func)
     }
 
+    internal fun navigateSetup(func:(id:Int)->Unit){
+        activityCallback?.navigateTo(func)
+    }
+
 }
 
 interface ActivityCallback {
+    fun navigateTo(func: (id:Int) -> Unit)
     fun setupToolbar(title: Int,func: ()->Unit)
     fun toolbarIconVisibility(visibility:Boolean)
 }

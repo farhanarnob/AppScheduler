@@ -9,6 +9,7 @@ import android.view.*
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.farhanarnob.appscheduler.R
 import com.farhanarnob.appscheduler.adapter.ScheduleAdapter
@@ -88,6 +89,7 @@ class HomeFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         lifecycleScope.launchWhenResumed {
             viewModelSetup()
+            navigateSetup(this@HomeFragment::navigateTo)
             toolbarSetup(this@HomeFragment::onBackPressed,R.string.schedule_list)
             hideToolbarBackIcon()
             UIUtility.showFullScreen(requireActivity())
@@ -139,5 +141,9 @@ class HomeFragment : BaseFragment() {
             }
         }
     }
+    private fun navigateTo(id:Int){
+        findNavController().navigate(id)
+    }
+
 
 }
