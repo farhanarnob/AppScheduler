@@ -15,4 +15,7 @@
     <string name="loading">Loading…</string>
     <string name="empty_schedule">Empty Schedule</string>
     <string name="add_a_schedule">Create a Schedule</string>
+    <string name="select_time">Select Time</string>
+    <string name="dash">-</string>
+    <string name="select_app">Select App</string>
 </resources>
