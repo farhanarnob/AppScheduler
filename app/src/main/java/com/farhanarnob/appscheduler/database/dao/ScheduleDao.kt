@@ -25,6 +25,8 @@ interface ScheduleDao {
     @Query("DELETE FROM Schedule")
     suspend fun deleteAllSchedules()
 
+    @Query("DELETE FROM Schedule where scheduledTime = :scheduleTime")
+    suspend fun deleteSchedule(scheduleTime: Long)
     @Delete
     suspend fun deleteSchedule(schedule: Schedule)
 }

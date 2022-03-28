@@ -39,11 +39,19 @@ class CreateOrUpdateScheduleViewModel(private val database: AppDatabase,
         appCoroutineScope.coroutineContext.cancelChildren()
     }
 
-    fun saveASchedule(context: Context, packageInfo: PackageInfo?, scheduleTime: Long?) {
+    fun saveASchedule(
+        context: Context,
+        packageInfo: PackageInfo?,
+        scheduleTime: Long?,
+        args: CreateOrUpdateScheduleFragmentArgs
+    ) {
         appCoroutineScope.launch {
             if(packageInfo == null || scheduleTime == null){
                 _success.postValue(R.string.select_time)
                 return@launch
+            }
+            if(args.scheduleTime != 0L){
+                scheduleRepository.deleteASchedule(args.scheduleTime)
             }
             val saved = scheduleRepository.saveAScheduledApp(appName = packageInfo.appName,
                 name = packageInfo.name,

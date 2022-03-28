@@ -90,16 +90,12 @@ class HomeFragment : BaseFragment() {
         lifecycleScope.launchWhenResumed {
             viewModelSetup()
             navigateSetup(this@HomeFragment::navigateTo)
-            toolbarSetup(this@HomeFragment::onBackPressed,R.string.schedule_list)
+            toolbarSetup({ } ,R.string.schedule_list)
             hideToolbarBackIcon()
             UIUtility.showFullScreen(requireActivity())
             adapterInitialize()
             observe()
         }
-    }
-
-    private fun onBackPressed() {
-
     }
 
     private fun viewModelSetup() {
@@ -114,13 +110,16 @@ class HomeFragment : BaseFragment() {
     private fun adapterInitialize() {
         scheduleListListAdapter = ScheduleAdapter(object :ScheduleAdapter.ScheduleAdapterListener{
             override fun updateItemClick(schedule: Schedule) {
-                findNavController().navigate(
-                    HomeFragmentDirections.actionHomeFragmentToCreateOrUpdateScheduleFragment(
-                    appName = schedule.appName,
-                    scheduleTime = schedule.scheduledTime,
-                    name = schedule.name,
-                    pkgName = schedule.packageName
-                ))
+                lifecycleScope.launchWhenResumed {
+                    UIUtility.addButtonVisibility(requireActivity(),View.GONE)
+                    findNavController().navigate(
+                        HomeFragmentDirections.actionHomeFragmentToCreateOrUpdateScheduleFragment(
+                            appName = schedule.appName,
+                            scheduleTime = schedule.scheduledTime,
+                            name = schedule.name,
+                            pkgName = schedule.packageName
+                        ))
+                }
             }
 
             override fun deleteItemClick(schedule: Schedule) {

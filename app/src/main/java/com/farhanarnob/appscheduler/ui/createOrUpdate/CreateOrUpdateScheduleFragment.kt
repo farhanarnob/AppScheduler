@@ -1,7 +1,6 @@
 package com.farhanarnob.appscheduler.ui.createOrUpdate
 
 import android.app.TimePickerDialog
-import android.content.pm.ResolveInfo
 import android.os.Bundle
 import android.view.*
 import android.widget.AdapterView
@@ -18,7 +17,6 @@ import com.farhanarnob.appscheduler.databinding.FragmentCreateOrUpdateBinding
 import com.farhanarnob.appscheduler.model.PackageInfo
 import com.farhanarnob.appscheduler.util.DateUtility
 import com.farhanarnob.appscheduler.util.UIUtility
-import kotlinx.coroutines.delay
 
 
 class CreateOrUpdateScheduleFragment : BaseFragment() {
@@ -152,6 +150,6 @@ class CreateOrUpdateScheduleFragment : BaseFragment() {
     }
 
     private val saveOnClickListener = View.OnClickListener {
-        viewModel.saveASchedule(requireContext(),appResolveInfo,scheduleTime)
+        viewModel.saveASchedule(requireContext(),appResolveInfo,scheduleTime, args)
     }
 }

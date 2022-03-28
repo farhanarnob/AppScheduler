@@ -6,6 +6,7 @@ import android.app.*
 import android.content.Context
 import android.content.Context.POWER_SERVICE
 import android.content.DialogInterface
+import android.opengl.Visibility
 import android.os.Build
 import android.os.PowerManager
 import android.view.View
@@ -75,6 +76,9 @@ object UIUtility {
             .waitingPageLayout.waitingPageMother.visibility = View.GONE
     }
 
+    fun addButtonVisibility(activity: Activity, visibility: Int) {
+        (activity as MainActivity).binding.fabAdd.visibility = visibility
+    }
 
     fun showWaitingScreen(activity: Activity) {
         (activity as MainActivity).binding.waitingPageLayout.waitingPageMother.visibility = View.VISIBLE

@@ -14,6 +14,7 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.farhanarnob.appscheduler.R
 import com.farhanarnob.appscheduler.databinding.ActivityMainBinding
+import com.farhanarnob.appscheduler.util.UIUtility
 import com.google.android.material.snackbar.Snackbar
 
 
@@ -37,7 +38,7 @@ class MainActivity : AppCompatActivity(), ActivityCallback {
 
         binding.fabAdd.setOnClickListener { view ->
             navigatetoFragment?.let {
-                binding.fabAdd.visibility = View.GONE
+                UIUtility.addButtonVisibility(this@MainActivity,View.GONE)
                 it(R.id.CreateOrUpdateScheduleFragment)
             }
         }
@@ -52,7 +53,7 @@ class MainActivity : AppCompatActivity(), ActivityCallback {
 
     override fun navigateTo(func: (id: Int) -> Unit) {
         lifecycleScope.launchWhenResumed {
-            binding.fabAdd.visibility = View.VISIBLE
+            UIUtility.addButtonVisibility(this@MainActivity,View.VISIBLE)
             navigatetoFragment = func
         }
     }

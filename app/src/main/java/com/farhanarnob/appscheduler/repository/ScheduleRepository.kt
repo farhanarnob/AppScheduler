@@ -56,7 +56,9 @@ class ScheduleRepository private constructor(
         return database.scheduleDao().insertSchedule(Schedule(appName = appName,pkgApp,name,
             false,scheduleTime))
     }
-
+    suspend fun deleteASchedule(time: Long){
+        database.scheduleDao().deleteSchedule(time)
+    }
     suspend fun clearSchedule() {
         database.scheduleDao().deleteAllSchedules()
     }
