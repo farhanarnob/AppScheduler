@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import com.farhanarnob.appscheduler.R
 import com.farhanarnob.appscheduler.repository.ScheduleRepository
+import com.farhanarnob.appscheduler.util.ScheduleUtility
 import com.hellodoc24.hellodoc24patientapp.data.source.database.AppDatabase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -51,8 +52,11 @@ class CreateOrUpdateScheduleViewModel(private val database: AppDatabase,
             )
             if(saved == 0L){
                 _success.postValue(false)
-            }else{_success.postValue(true)}
-
+            }else{
+                ScheduleUtility.scheduleAppStartService(context,scheduleTime,
+                    appResolveInfo.activityInfo.packageName)
+                _success.postValue(true)
+            }
         }
 
     }

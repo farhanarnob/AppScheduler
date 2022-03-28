@@ -10,7 +10,7 @@ data class Schedule(
     val appName:String,
     val packageName:String,
     val name:String,
-    val executed: Boolean,
+    var executed: Boolean,
     @PrimaryKey
     val scheduledTime: Long,
 )

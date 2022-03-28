@@ -21,15 +21,18 @@ class ScheduleAppStartService(context: Context, params: WorkerParameters) :
             val scheduledTime: Long = inputData.getLong(SCHEDULED_TIME,0L)
             if(scheduledTime != 0L && pkgName != null){
                 withContext(Dispatchers.IO) {
-                    result = Result.success()
                     val schedule =database.scheduleDao().getSchedule(scheduledTime)
-                    val intent = Intent(Intent.ACTION_MAIN)
-                    intent.addCategory(Intent.CATEGORY_LAUNCHER)
-                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or
-                            Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED
-                    intent.component = schedule?.packageName?.let {
-                        ComponentName(it, schedule.name) }
-                    startActivity(intent)
+                    if (schedule != null) {
+                        result = Result.success()
+                        val intent = Intent(Intent.ACTION_MAIN)
+                        intent.addCategory(Intent.CATEGORY_LAUNCHER)
+                        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or
+                                Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED
+                        intent.component = ComponentName(schedule.packageName, schedule.name)
+                        startActivity(intent)
+                        schedule.executed = true
+                        database.scheduleDao().insertSchedule(schedule)
+                    }
                 }
             }
             return result

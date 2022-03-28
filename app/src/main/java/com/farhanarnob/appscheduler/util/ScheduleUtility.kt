@@ -1,7 +1,6 @@
 package com.farhanarnob.appscheduler.util
 
 import android.content.Context
-import android.provider.ContactsContract.Directory.PACKAGE_NAME
 import androidx.work.*
 import com.farhanarnob.appscheduler.background_service.ScheduleAppStartService
 import kotlinx.coroutines.CoroutineScope
@@ -11,10 +10,9 @@ import java.util.concurrent.TimeUnit
 
 const val PKG_NAME = "PACKAGE_NAME"
 const val SCHEDULED_TIME = "SCHEDULED_TIME"
-object ScheduleServiceUtility {
-
+object ScheduleUtility {
     fun scheduleAppStartService(
-        context: Context,specificTimeToTrigger :Long, pkgName: String
+        context: Context, specificTimeToTrigger :Long, pkgName: String
     ) {
         CoroutineScope(Dispatchers.IO).launch {
             val data: Data.Builder = Data.Builder()
@@ -26,7 +24,7 @@ object ScheduleServiceUtility {
                 .build()
             val scheduleLogOffService =
                 OneTimeWorkRequestBuilder<ScheduleAppStartService>()
-                    .setInitialDelay(delayToPass,TimeUnit.MILLISECONDS)
+                    .setInitialDelay(delayToPass, TimeUnit.MILLISECONDS)
                     .setBackoffCriteria(
                         BackoffPolicy.LINEAR,
                         OneTimeWorkRequest.MIN_BACKOFF_MILLIS,
