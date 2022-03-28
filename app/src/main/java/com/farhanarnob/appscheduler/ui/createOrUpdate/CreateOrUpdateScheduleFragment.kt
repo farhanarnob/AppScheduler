@@ -1,8 +1,6 @@
 package com.farhanarnob.appscheduler.ui.createOrUpdate
 
-import android.content.ComponentName
-import android.content.Intent
-import android.content.pm.ActivityInfo
+import android.app.TimePickerDialog
 import android.content.pm.ResolveInfo
 import android.os.Bundle
 import android.view.*
@@ -11,24 +9,22 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.farhanarnob.appscheduler.R
 import com.farhanarnob.appscheduler.adapter.AppInfoArrayAdapter
-import com.farhanarnob.appscheduler.adapter.ScheduleAdapter
 import com.farhanarnob.appscheduler.base.BaseAppApplication
 import com.farhanarnob.appscheduler.base.BaseFragment
 import com.farhanarnob.appscheduler.databinding.FragmentCreateOrUpdateBinding
-import com.farhanarnob.appscheduler.databinding.FragmentHomeBinding
-import com.farhanarnob.appscheduler.model.Schedule
+import com.farhanarnob.appscheduler.util.DateUtility
 import com.farhanarnob.appscheduler.util.UIUtility
-import com.hellodoc24.hellodoc24patientapp.data.source.database.AppDatabase
 
 
 class CreateOrUpdateScheduleFragment : BaseFragment() {
 
+    private var timePicker: TimePickerDialog? = null
     private lateinit var viewModel: CreateOrUpdateScheduleViewModel
     private lateinit var binding: FragmentCreateOrUpdateBinding
     private var appResolveInfo: ResolveInfo? = null
+    private var scheduleTime: Long? = null
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -49,7 +45,13 @@ class CreateOrUpdateScheduleFragment : BaseFragment() {
             showToolbarBackIcon()
             observe()
             viewModel.loadInstalledAppList(requireContext())
+            initListener()
         }
+    }
+
+    private fun initListener() {
+        binding.tvDateOfBirth.setOnClickListener(timeDateOnClickListener)
+        binding.fabSave.setOnClickListener(saveOnClickListener)
     }
 
     private fun onBackPressed() {
@@ -94,6 +96,47 @@ class CreateOrUpdateScheduleFragment : BaseFragment() {
                 }
             }
         }
+        viewModel.success.observe(viewLifecycleOwner){
+            when(it){
+                is Int ->{
+                    UIUtility.generalDialogue(requireActivity(),
+                        getString(R.string.warning),
+                        getString(it))
+                }
+                is Boolean ->{
+                    if(it){
+                        onBackPressed()
+                    }else{
+                        UIUtility.generalDialogue(requireActivity(),
+                            getString(R.string.warning),
+                            getString(R.string.time_conflict))
+                    }
+                }
+            }
+        }
+    }
+    private val timeDateOnClickListener = View.OnClickListener {
+        val time = System.currentTimeMillis()
+        timePicker?.dismiss()
+        timePicker = null
+        timePicker = DateUtility.timePicker(
+            getString(R.string.select_time),
+            requireActivity(),
+            time
+        ) { view, hourOfDay, minute ->
+            val scheduledTime = DateUtility.getTimeFromTimePicker(time,hourOfDay,minute)
+            scheduleTime = if(time>scheduledTime){
+                DateUtility.addADay(scheduledTime)
+            }else{
+                scheduledTime
+            }
+            binding.tvDateOfBirth.text = DateUtility.getTimeInString(
+                DateUtility.WITH_SEC_DATE_FORMAT, scheduleTime!!
+            )
+        }
     }
 
+    private val saveOnClickListener = View.OnClickListener {
+        viewModel.saveASchedule(requireContext(),appResolveInfo,scheduleTime)
+    }
 }

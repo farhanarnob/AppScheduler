@@ -5,11 +5,13 @@ import android.annotation.TargetApi
 import android.app.*
 import android.content.Context
 import android.content.Context.POWER_SERVICE
+import android.content.DialogInterface
 import android.os.Build
 import android.os.PowerManager
 import android.view.View
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
+import com.farhanarnob.appscheduler.R
 import com.farhanarnob.appscheduler.base.MainActivity
 
 object UIUtility {
@@ -115,7 +117,38 @@ object UIUtility {
         }
     }
 
+    fun generalDialogue(
+        activity: Activity,
+        title: String,
+        message: String,
+        listener: DialogInterface.OnClickListener? = null
+    ): AlertDialog {
+        return AlertDialog.Builder(activity)
+            .setTitle(title)
+            .setMessage(message)
+            .setPositiveButton(activity.getString(R.string.okay), listener)
+            .setCancelable(false)
+            .show()
+    }
 
+    fun yesNoDialogue(
+        activity: Activity,
+        title: String,
+        message: String,
+        cancelable: Boolean = true,
+        positiveButtonMessage: Int = R.string.yes,
+        negativeButtonMessage: Int = R.string.no,
+        negativeListener: DialogInterface.OnClickListener? = null,
+        positiveListener: DialogInterface.OnClickListener,
+    ): AlertDialog {
+        return AlertDialog.Builder(activity)
+            .setTitle(title)
+            .setMessage(message)
+            .setPositiveButton(activity.getString(positiveButtonMessage), positiveListener)
+            .setNegativeButton(activity.getString(negativeButtonMessage), negativeListener)
+            .setCancelable(cancelable)
+            .show()
+    }
     data class NotificationString(
         val channelId: String,
         val title: String,

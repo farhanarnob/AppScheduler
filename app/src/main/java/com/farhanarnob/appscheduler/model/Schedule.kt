@@ -8,10 +8,11 @@ import androidx.room.PrimaryKey
 @Entity
 data class Schedule(
     val appName:String,
-    @PrimaryKey
     val packageName:String,
     val name:String,
-    val scheduledTime: Long
+    val executed: Boolean,
+    @PrimaryKey
+    val scheduledTime: Long,
 )
 
 fun ResolveInfo.asSchedule(context: Context):Schedule{
@@ -20,5 +21,6 @@ fun ResolveInfo.asSchedule(context: Context):Schedule{
         packageName = this.activityInfo.packageName,
         name = this.activityInfo.name,
         scheduledTime = System.currentTimeMillis(),
+        executed = false
     )
 }

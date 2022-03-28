@@ -10,6 +10,7 @@ import kotlinx.coroutines.launch
 import java.util.concurrent.TimeUnit
 
 const val PKG_NAME = "PACKAGE_NAME"
+const val SCHEDULED_TIME = "SCHEDULED_TIME"
 object ScheduleServiceUtility {
 
     fun scheduleAppStartService(
@@ -17,7 +18,7 @@ object ScheduleServiceUtility {
     ) {
         CoroutineScope(Dispatchers.IO).launch {
             val data: Data.Builder = Data.Builder()
-            data.putString(PKG_NAME, pkgName)
+            data.putString(PKG_NAME, pkgName).putLong(SCHEDULED_TIME,specificTimeToTrigger)
             val currentTime = System.currentTimeMillis()
             val delayToPass = specificTimeToTrigger  - currentTime
             val workManager = WorkManager.getInstance(context)

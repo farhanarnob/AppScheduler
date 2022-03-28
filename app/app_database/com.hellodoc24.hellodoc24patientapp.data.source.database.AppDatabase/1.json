@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "0bf0fbb00ef7bec45aa90b493911d961",
+    "identityHash": "dc10901d83e1e338b8929285ad1ecbca",
     "entities": [
       {
         "tableName": "Schedule",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`appName` TEXT NOT NULL, `packageName` TEXT NOT NULL, `name` TEXT NOT NULL, `scheduledTime` INTEGER NOT NULL, PRIMARY KEY(`packageName`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`appName` TEXT NOT NULL, `packageName` TEXT NOT NULL, `name` TEXT NOT NULL, `executed` INTEGER NOT NULL, `scheduledTime` INTEGER NOT NULL, PRIMARY KEY(`scheduledTime`))",
         "fields": [
           {
             "fieldPath": "appName",
@@ -27,6 +27,12 @@
             "notNull": true
           },
           {
+            "fieldPath": "executed",
+            "columnName": "executed",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
             "fieldPath": "scheduledTime",
             "columnName": "scheduledTime",
             "affinity": "INTEGER",
@@ -35,7 +41,7 @@
         ],
         "primaryKey": {
           "columnNames": [
-            "packageName"
+            "scheduledTime"
           ],
           "autoGenerate": false
         },
@@ -46,7 +52,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '0bf0fbb00ef7bec45aa90b493911d961')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'dc10901d83e1e338b8929285ad1ecbca')"
     ]
   }
 }

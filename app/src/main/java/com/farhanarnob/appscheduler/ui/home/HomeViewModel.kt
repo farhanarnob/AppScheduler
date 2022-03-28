@@ -16,8 +16,6 @@ class HomeViewModel(private val database: AppDatabase,
     fun startToCheckApp(context: Context) {
         appCoroutineScope.launch {
             scheduleRepository.clearSchedule()
-            delay(10000)
-            scheduleRepository.checkInstalledApps(context)
         }
     }
 

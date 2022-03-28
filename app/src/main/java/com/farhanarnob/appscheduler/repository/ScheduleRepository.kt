@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.pm.ResolveInfo
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.farhanarnob.appscheduler.model.Schedule
 import com.farhanarnob.appscheduler.model.asSchedule
 import com.hellodoc24.hellodoc24patientapp.data.source.database.AppDatabase
 import kotlinx.coroutines.flow.Flow
@@ -33,16 +34,28 @@ class ScheduleRepository private constructor(
         _appList.emit(context.packageManager.queryIntentActivities(mainIntent, 0))
     }
 
-    suspend fun checkInstalledApps(context: Context){
-        val mainIntent = Intent(Intent.ACTION_MAIN, null)
-        mainIntent.addCategory(Intent.CATEGORY_LAUNCHER)
-        val pkgAppsList: List<ResolveInfo> =
-            context.packageManager.queryIntentActivities(mainIntent, 0)
-        saveInstalledAppsList(context,pkgAppsList)
-    }
+//    suspend fun checkInstalledApps(context: Context){
+//        val mainIntent = Intent(Intent.ACTION_MAIN, null)
+//        mainIntent.addCategory(Intent.CATEGORY_LAUNCHER)
+//        val pkgAppsList: List<ResolveInfo> =
+//            context.packageManager.queryIntentActivities(mainIntent, 0)
+//        saveInstalledAppsList(context,pkgAppsList)
+//    }
+//
+//    suspend fun saveInstalledAppsList(context: Context,pkgAppList: List<ResolveInfo>){
+//        database.scheduleDao().insertSchedules(*pkgAppList.map {it.asSchedule(context)}.toTypedArray())
+//    }
 
-    suspend fun saveInstalledAppsList(context: Context,pkgAppList: List<ResolveInfo>){
-        database.scheduleDao().insertSchedules(*pkgAppList.map {it.asSchedule(context)}.toTypedArray())
+    suspend fun saveAScheduledApp(name:String,
+                                  appName: String, pkgApp: String,
+                                  scheduleTime: Long): Long {
+        Schedule(appName,pkgApp,name,false,scheduleTime)
+        val existingSchedule = database.scheduleDao().getSchedule(scheduleTime)
+        if(existingSchedule!= null){
+            return 0L
+        }
+        return database.scheduleDao().insertSchedule(Schedule(appName = appName,pkgApp,name,
+            false,scheduleTime))
     }
 
     suspend fun clearSchedule() {

@@ -18,4 +18,12 @@
     <string name="select_time">Select Time</string>
     <string name="dash">-</string>
     <string name="select_app">Select App</string>
+    <string name="okay">okay</string>
+    <string name="yes">YES</string>
+    <string name="no">NO</string>
+    <string name="warning">Warning!</string>
+    <string name="invalid_time">Invalide time. Need advance time.</string>
+    <string name="click_here">Click here to choose</string>
+    <string name="select_all_criteria">Select all criteria</string>
+    <string name="time_conflict">Time conflict</string>
 </resources>

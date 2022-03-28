@@ -95,7 +95,7 @@ class HomeFragment : BaseFragment() {
             UIUtility.showFullScreen(requireActivity())
             adapterInitialize()
             observe()
-            viewModel.startToCheckApp(requireContext())
+//            viewModel.startToCheckApp(requireContext())
         }
     }
 
