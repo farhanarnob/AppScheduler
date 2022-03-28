@@ -26,4 +26,5 @@
     <string name="click_here">Click here to choose</string>
     <string name="select_all_criteria">Select all criteria</string>
     <string name="time_conflict">Time conflict</string>
+    <string name="executed">executed</string>
 </resources>

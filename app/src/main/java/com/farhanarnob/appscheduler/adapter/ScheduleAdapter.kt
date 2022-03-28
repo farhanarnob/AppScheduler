@@ -2,6 +2,7 @@ package com.farhanarnob.appscheduler.adapter
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -52,12 +53,21 @@ class ScheduleAdapter(val scheduleAdapterListener: ScheduleAdapterListener) :
                 DateUtility.WITH_SEC_DATE_FORMAT,
                 schedule.scheduledTime
             )
-            binding.ivEdit.setOnClickListener {
-                scheduleAdapterListener.updateItemClick(schedule)
-            }
+            if(schedule.executed){
+                binding.ivDelete.visibility = View.GONE
+                binding.ivEdit.visibility = View.GONE
+                binding.tvExecuted.visibility = View.VISIBLE
+            }else{
+                binding.ivDelete.visibility = View.VISIBLE
+                binding.ivEdit.visibility = View.VISIBLE
+                binding.tvExecuted.visibility = View.GONE
+                binding.ivEdit.setOnClickListener {
+                    scheduleAdapterListener.updateItemClick(schedule)
+                }
 
-            binding.ivDelete.setOnClickListener {
-                scheduleAdapterListener.deleteItemClick(schedule)
+                binding.ivDelete.setOnClickListener {
+                    scheduleAdapterListener.deleteItemClick(schedule)
+                }
             }
         }
     }
