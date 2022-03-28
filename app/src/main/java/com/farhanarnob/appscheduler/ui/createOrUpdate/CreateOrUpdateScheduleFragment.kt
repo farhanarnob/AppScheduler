@@ -9,13 +9,16 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.farhanarnob.appscheduler.R
 import com.farhanarnob.appscheduler.adapter.AppInfoArrayAdapter
 import com.farhanarnob.appscheduler.base.BaseAppApplication
 import com.farhanarnob.appscheduler.base.BaseFragment
 import com.farhanarnob.appscheduler.databinding.FragmentCreateOrUpdateBinding
+import com.farhanarnob.appscheduler.model.PackageInfo
 import com.farhanarnob.appscheduler.util.DateUtility
 import com.farhanarnob.appscheduler.util.UIUtility
+import kotlinx.coroutines.delay
 
 
 class CreateOrUpdateScheduleFragment : BaseFragment() {
@@ -23,8 +26,9 @@ class CreateOrUpdateScheduleFragment : BaseFragment() {
     private var timePicker: TimePickerDialog? = null
     private lateinit var viewModel: CreateOrUpdateScheduleViewModel
     private lateinit var binding: FragmentCreateOrUpdateBinding
-    private var appResolveInfo: ResolveInfo? = null
+    private var appResolveInfo: PackageInfo? = null
     private var scheduleTime: Long? = null
+    private val args: CreateOrUpdateScheduleFragmentArgs by navArgs()
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -50,20 +54,30 @@ class CreateOrUpdateScheduleFragment : BaseFragment() {
     }
 
     private fun initListener() {
-        binding.tvDateOfBirth.setOnClickListener(timeDateOnClickListener)
+        binding.tvTime.setOnClickListener(timeDateOnClickListener)
         binding.fabSave.setOnClickListener(saveOnClickListener)
     }
 
     private fun onBackPressed() {
         findNavController().navigateUp()
     }
-    private fun appSpinner(list: List<ResolveInfo>) {
+    private fun appSpinner(list: List<PackageInfo>) {
         val adapter = AppInfoArrayAdapter(
             requireContext(),
             R.layout.spinner_app, list
         )
         binding.spAppSelection.adapter = adapter
-        binding.spAppSelection.setSelection(0)
+        val position = if(args.name != null && args.appName != null
+            && args.pkgName != null && args.scheduleTime != 0L){
+            scheduleTime = args.scheduleTime
+            binding.tvTime.text = DateUtility.getTimeInString(
+                DateUtility.WITH_SEC_DATE_FORMAT, scheduleTime!!
+            )
+            list.indexOf(PackageInfo(name = args.name!!,
+                appName = args.appName!!, packageName = args.pkgName!!))
+        }else 0
+
+        binding.spAppSelection.setSelection(position)
         binding.spAppSelection.onItemSelectedListener =
             object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(
@@ -83,7 +97,8 @@ class CreateOrUpdateScheduleFragment : BaseFragment() {
             val factory = CreateOrUpdateScheduleModelFactory(
                 database,scheduleRepository
             )
-            viewModel = ViewModelProvider(this@CreateOrUpdateScheduleFragment, factory)[CreateOrUpdateScheduleViewModel::class.java]
+            viewModel = ViewModelProvider(this@CreateOrUpdateScheduleFragment,
+                factory)[CreateOrUpdateScheduleViewModel::class.java]
         }
     }
 
@@ -130,7 +145,7 @@ class CreateOrUpdateScheduleFragment : BaseFragment() {
             }else{
                 scheduledTime
             }
-            binding.tvDateOfBirth.text = DateUtility.getTimeInString(
+            binding.tvTime.text = DateUtility.getTimeInString(
                 DateUtility.WITH_SEC_DATE_FORMAT, scheduleTime!!
             )
         }

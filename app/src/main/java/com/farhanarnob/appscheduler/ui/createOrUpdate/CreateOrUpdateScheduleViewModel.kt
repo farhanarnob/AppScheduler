@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import com.farhanarnob.appscheduler.R
+import com.farhanarnob.appscheduler.model.PackageInfo
 import com.farhanarnob.appscheduler.repository.ScheduleRepository
 import com.farhanarnob.appscheduler.util.ScheduleUtility
 import com.hellodoc24.hellodoc24patientapp.data.source.database.AppDatabase
@@ -38,23 +39,22 @@ class CreateOrUpdateScheduleViewModel(private val database: AppDatabase,
         appCoroutineScope.coroutineContext.cancelChildren()
     }
 
-    fun saveASchedule(context: Context,appResolveInfo: ResolveInfo?, scheduleTime: Long?) {
+    fun saveASchedule(context: Context, packageInfo: PackageInfo?, scheduleTime: Long?) {
         appCoroutineScope.launch {
-            if(appResolveInfo == null || scheduleTime == null){
+            if(packageInfo == null || scheduleTime == null){
                 _success.postValue(R.string.select_time)
                 return@launch
             }
-            val saved = scheduleRepository.saveAScheduledApp(appName = appResolveInfo
-                .loadLabel(context.packageManager).toString(),
-                name = appResolveInfo.activityInfo?.name.toString(),
-                pkgApp = appResolveInfo.activityInfo?.packageName.toString(),
+            val saved = scheduleRepository.saveAScheduledApp(appName = packageInfo.appName,
+                name = packageInfo.name,
+                pkgApp = packageInfo.packageName,
                 scheduleTime = scheduleTime
             )
             if(saved == 0L){
                 _success.postValue(false)
             }else{
                 ScheduleUtility.scheduleAppStartService(context,scheduleTime,
-                    appResolveInfo.activityInfo.packageName)
+                    packageInfo.packageName)
                 _success.postValue(true)
             }
         }

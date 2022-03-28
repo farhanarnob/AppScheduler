@@ -95,7 +95,6 @@ class HomeFragment : BaseFragment() {
             UIUtility.showFullScreen(requireActivity())
             adapterInitialize()
             observe()
-//            viewModel.startToCheckApp(requireContext())
         }
     }
 
@@ -115,7 +114,13 @@ class HomeFragment : BaseFragment() {
     private fun adapterInitialize() {
         scheduleListListAdapter = ScheduleAdapter(object :ScheduleAdapter.ScheduleAdapterListener{
             override fun updateItemClick(schedule: Schedule) {
-
+                findNavController().navigate(
+                    HomeFragmentDirections.actionHomeFragmentToCreateOrUpdateScheduleFragment(
+                    appName = schedule.appName,
+                    scheduleTime = schedule.scheduledTime,
+                    name = schedule.name,
+                    pkgName = schedule.packageName
+                ))
             }
 
             override fun deleteItemClick(schedule: Schedule) {

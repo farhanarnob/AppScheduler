@@ -17,5 +17,22 @@
     <fragment
         android:id="@+id/CreateOrUpdateScheduleFragment"
         android:name="com.farhanarnob.appscheduler.ui.createOrUpdate.CreateOrUpdateScheduleFragment"
-        android:label="CreateOrUpdateScheduleFragment" />
+        android:label="CreateOrUpdateScheduleFragment" >
+        <argument
+            android:name="appName"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="scheduleTime"
+            app:argType="long"
+            android:defaultValue="0L" />
+        <argument
+            android:name="name"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="pkgName"
+            app:argType="string"
+            app:nullable="true" />
+    </fragment>
 </navigation>

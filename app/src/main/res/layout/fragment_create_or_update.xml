@@ -62,7 +62,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/tv_date_of_birth"
+            android:id="@+id/tv_time"
             style="@style/Widget.AppCompat.Spinner"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

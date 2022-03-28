@@ -2,22 +2,18 @@ package com.farhanarnob.appscheduler.repository
 
 import android.content.Context
 import android.content.Intent
-import android.content.pm.ResolveInfo
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import com.farhanarnob.appscheduler.model.PackageInfo
 import com.farhanarnob.appscheduler.model.Schedule
-import com.farhanarnob.appscheduler.model.asSchedule
+import com.farhanarnob.appscheduler.model.asPackage
 import com.hellodoc24.hellodoc24patientapp.data.source.database.AppDatabase
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.sync.Mutex
 
 class ScheduleRepository private constructor(
     private val database: AppDatabase
 ) {
     private val mutex = Mutex()
-    val _appList = MutableStateFlow<List<ResolveInfo>?>(null)
+    val _appList = MutableStateFlow<List<PackageInfo>?>(null)
     companion object {
         @Volatile
         private var INSTANCE: ScheduleRepository? = null
@@ -31,7 +27,10 @@ class ScheduleRepository private constructor(
     suspend fun loadInstalledApps(context: Context){
         val mainIntent = Intent(Intent.ACTION_MAIN, null)
         mainIntent.addCategory(Intent.CATEGORY_LAUNCHER)
-        _appList.emit(context.packageManager.queryIntentActivities(mainIntent, 0))
+        val pkdList = context.packageManager.queryIntentActivities(mainIntent, 0)
+        _appList.emit(pkdList.map {
+            it.asPackage(context) }
+        )
     }
 
 //    suspend fun checkInstalledApps(context: Context){

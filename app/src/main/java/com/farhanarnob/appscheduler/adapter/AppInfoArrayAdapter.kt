@@ -1,20 +1,20 @@
 package com.farhanarnob.appscheduler.adapter
 
 import android.content.Context
-import android.content.pm.ResolveInfo
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.TextView
 import androidx.annotation.LayoutRes
+import com.farhanarnob.appscheduler.model.PackageInfo
 
 
 class AppInfoArrayAdapter(
     context: Context, @LayoutRes private val layoutResource: Int,
-    val appList: List<ResolveInfo>,
+    val appList: List<PackageInfo>,
 ) :
-    ArrayAdapter<ResolveInfo>(context, layoutResource, appList) {
+    ArrayAdapter<PackageInfo>(context, layoutResource, appList) {
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         return createViewFromResource(position, convertView, parent)
@@ -32,7 +32,7 @@ class AppInfoArrayAdapter(
         val view: TextView = convertView as TextView? ?: LayoutInflater.from(context).inflate(
             layoutResource, parent, false
         ) as TextView
-        view.text = appList[position].loadLabel(parent?.rootView?.context?.packageManager)
+        view.text = appList[position].appName
         return view
     }
 
