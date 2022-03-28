@@ -27,4 +27,5 @@
     <string name="select_all_criteria">Select all criteria</string>
     <string name="time_conflict">Time conflict</string>
     <string name="executed">executed</string>
+    <string name="want_to_delete_all">Want to delete all schedules?</string>
 </resources>

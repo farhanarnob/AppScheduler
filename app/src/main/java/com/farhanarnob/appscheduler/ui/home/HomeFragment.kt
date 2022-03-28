@@ -19,13 +19,15 @@ import com.farhanarnob.appscheduler.databinding.FragmentHomeBinding
 import com.farhanarnob.appscheduler.model.Schedule
 import com.farhanarnob.appscheduler.util.UIUtility
 import com.hellodoc24.hellodoc24patientapp.data.source.database.AppDatabase
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
 class HomeFragment : BaseFragment() {
 
     private lateinit var viewModel: HomeViewModel
     private lateinit var binding: FragmentHomeBinding
-    private lateinit var database: AppDatabase
     private var scheduleListListAdapter: ScheduleAdapter? = null
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -52,32 +54,18 @@ class HomeFragment : BaseFragment() {
         return when (item.itemId) {
             R.id.clear_all_schedule -> {
                 lifecycleScope.launchWhenResumed {
-                    val mainIntent = Intent(Intent.ACTION_MAIN, null)
-                    mainIntent.addCategory(Intent.CATEGORY_LAUNCHER)
-                    val pkgAppsList: List<ResolveInfo> =
-                        requireActivity().packageManager.queryIntentActivities(mainIntent, 0)
-                    android.app.AlertDialog
-                        .Builder(requireContext())
-                        .setMessage(pkgAppsList.map {
-                            it.loadLabel(requireActivity().packageManager).toString()+
-                                    "***"+ it.activityInfo.packageName.toString()+
-                                    "###"+ it.activityInfo.name.toString()
-                        }.toString())
-                        .setCancelable(false)
-                        .setPositiveButton("Yes") { _, _ ->
-                            val activity: ActivityInfo = pkgAppsList[pkgAppsList.indices.random()].activityInfo
-                            val intent = Intent(Intent.ACTION_MAIN)
-                            intent.addCategory(Intent.CATEGORY_LAUNCHER)
-                            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or
-                                    Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED
-                            intent.component = ComponentName(
-                                activity.applicationInfo.packageName,
-                                activity.name
-                            )
-                            startActivity(intent)
+                    UIUtility.yesNoDialogue(activity = requireActivity(),
+                        title = getString(R.string.warning),
+                        message = getString(R.string.want_to_delete_all),
+                        cancelable = false,
+                        positiveButtonMessage = R.string.yes, negativeButtonMessage = R.string.no,
+                        negativeListener = null
+                    ) { _, _ ->
+                        CoroutineScope(Dispatchers.IO).launch {
+                            (context?.applicationContext as BaseAppApplication)
+                                .database.scheduleDao().deleteAllSchedules()
                         }
-                        .setNegativeButton("No") { _, _ -> }
-                        .create().show()
+                    }
                 }
                 true
             }
